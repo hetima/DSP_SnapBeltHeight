@@ -1,0 +1,7 @@
+{
+    "name": "SnapBeltHeight",
+    "description": "Resetting belt height snaps to the belt height under the cursor instead of the ground.",
+    "version_number": "1.0.0",
+    "dependencies": [],
+    "website_url": "https://github.com/hetima/DSP_SnapBeltHeight"
+}
