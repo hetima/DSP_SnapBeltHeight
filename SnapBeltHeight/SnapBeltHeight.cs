@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace HTSnapBeltHeight
 {
-    [BepInPlugin(__GUID__, __NAME__, "1.0.0")]
+    [BepInPlugin(__GUID__, __NAME__, "1.1.0")]
     public class SnapBeltHeight : BaseUnityPlugin
     {
         public const string __NAME__ = "SnapBeltHeight";
