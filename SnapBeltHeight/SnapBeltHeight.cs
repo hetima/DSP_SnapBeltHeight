@@ -44,7 +44,7 @@ namespace HTSnapBeltHeight
                 //IL_004b: stfld int32 BuildTool_Path::altitude
 
                 MethodInfo anchor = typeof(VFInput).GetMethod("get__beltsZeroKey");
-                MethodInfo rep = typeof(SnapBeltHeight).GetMethod("CastObjectAltitude");
+                MethodInfo rep = typeof(SnapBeltHeight).GetMethod("BeltsZeroPatch");
 
                 bool ready = false;
                 bool patched = false;
@@ -68,18 +68,33 @@ namespace HTSnapBeltHeight
             }
         }
 
-        public static int CastObjectAltitude()
+        public static int ObjectAltitude(Vector3 pos)
+        {
+            PlanetAuxData aux = GameMain.mainPlayer.controller.actionBuild.planetAux;
+            if (aux ==null)
+            {
+                return 0;
+            }
+            //Snapの第2引数をtrueにすると地面にスナップする
+            Vector3 ground = aux.Snap(pos, true);
+            float distance = Vector3.Distance(pos, ground);
+            return (int)Math.Round(distance / PlanetGrid.kAltGrid);
+        }
+
+        public static int BeltsZeroPatch()
         {
             int result = 0;
             BuildTool_Path tool = GameMain.mainPlayer.controller.actionBuild.pathTool;
             //ストレージにも対応したいけど castObject に入ってこない
             if (ObjectIsBeltOrSplitter(tool, tool.castObjectId))
             {
-                //Snapの第2引数をtrueにすると地面にスナップする
-                Vector3 ground = tool.actionBuild.planetAux.Snap(tool.castObjectPos, true);
-                float distance = Vector3.Distance(tool.castObjectPos, ground);
-                result = (int)Math.Round(distance / PlanetGrid.kAltGrid);
+                result = ObjectAltitude(tool.castObjectPos);
                 //Logger.LogInfo("distance:" + distance + " / Altitude:" + result);
+            }
+            //開始地点と地面をトグル
+            else if (tool.altitude == 0)
+            {
+                result = ObjectAltitude(tool.pathPoints[0]);
             }
 
             return result;
